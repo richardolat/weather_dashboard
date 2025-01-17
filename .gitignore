@@ -7,3 +7,6 @@
 terraform.tfstate
 terraform.tfstate.backup
 tfplan
+
+# Virtual environment directories
+myenv/
