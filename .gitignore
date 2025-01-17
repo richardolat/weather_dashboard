@@ -12,3 +12,4 @@ tfplan
 # Virtual environment directories
 myenv/
 
+.terraform/
