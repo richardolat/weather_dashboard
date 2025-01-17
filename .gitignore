@@ -1,0 +1,9 @@
+# Environment files
+.env
+.env.template
+
+# Terraform state and plan files
+.terraform.lock.hcl
+terraform.tfstate
+terraform.tfstate.backup
+tfplan
