@@ -18,12 +18,20 @@ class WeatherDashboard:
     def create_bucket(self):
         """Create S3 bucket if it doesn't exist"""
         try:
-            self.s3_client.create_bucket(
-                Bucket=self.bucket_name,
-                CreateBucketConfiguration={
-                    'LocationConstraint': boto3.Session().region_name
-                }
-            )
+            # Get the region from boto3 session or default to us-east-2
+            region = boto3.Session().region_name or "us-east-2"
+            
+            if region == "us-east-1":
+                self.s3_client.create_bucket(
+                    Bucket=self.bucket_name
+                )
+            else:
+                self.s3_client.create_bucket(
+                    Bucket=self.bucket_name,
+                    CreateBucketConfiguration={
+                        'LocationConstraint': region
+                    }
+                )
             print(f"Created bucket: {self.bucket_name}")
         except self.s3_client.exceptions.BucketAlreadyExists:
             print(f"Bucket already exists: {self.bucket_name}")
