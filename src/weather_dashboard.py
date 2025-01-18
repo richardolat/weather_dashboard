@@ -13,23 +13,23 @@ class WeatherDashboard:
     def __init__(self):
         self.api_key = os.getenv("WEATHERAPI_KEY")
         self.bucket_name = os.getenv("AWS_BUCKET_NAME")
-        self.s3_client = boto3.client('s3')
+        # Explicitly set the region name to avoid endpoint mismatches
+        self.s3_client = boto3.client('s3', region_name="us-west-2")
 
     def create_bucket(self):
         """Create S3 bucket if it doesn't exist"""
         try:
-            # Get the region from boto3 session or default to us-east-2
-            region = boto3.Session().region_name or "us-east-2"
-            
-            if region == "us-east-1":
+            if self.s3_client.meta.region_name == "us-east-1":
+                # us-east-1 doesn't require LocationConstraint
                 self.s3_client.create_bucket(
                     Bucket=self.bucket_name
                 )
             else:
+                # Other regions require LocationConstraint
                 self.s3_client.create_bucket(
                     Bucket=self.bucket_name,
                     CreateBucketConfiguration={
-                        'LocationConstraint': region
+                        'LocationConstraint': self.s3_client.meta.region_name
                     }
                 )
             print(f"Created bucket: {self.bucket_name}")
