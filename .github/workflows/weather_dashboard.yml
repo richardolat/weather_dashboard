@@ -1,6 +1,9 @@
 name: Weather Dashboard Automation
 
 on:
+  push:
+    branches:
+      - main # Trigger on push to the main branch
   workflow_dispatch: # Manual trigger
   schedule:
     - cron: "0 12 * * *" # Daily at 12:00 PM UTC
